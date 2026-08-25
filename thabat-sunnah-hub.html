@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0A0A0B">
+<meta name="color-scheme" content="dark only">
+<title>Thabāt · The Sunnah Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&family=Amiri:wght@400;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    color-scheme: dark only;
+    --bg:#0A0A0B; --surface:#131316; --surface-2:#1A1A1E; --line:#26262B;
+    --text:#F4F4F2; --text-dim:#8A8A86; --text-faint:#5A5A57;
+    --live:#F4F4F2;
+  }
+  *{box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent;}
+  html{ background:var(--bg); }
+  body{
+    background:var(--bg); color:var(--text); font-family:'Inter', -apple-system, sans-serif;
+    min-height:100vh; -webkit-font-smoothing:antialiased; display:flex; justify-content:center;
+    padding-bottom:60px; overflow-x:hidden;
+  }
+  .page{ width:100%; max-width:440px; position:relative; z-index:2; }
+
+  /* ── Boot: light rail sweeps down, then content ── */
+  .boot{ position:fixed; inset:0; z-index:60; background:var(--bg); pointer-events:none; animation:bootOut .7s ease 1.5s forwards; }
+  .boot-rail{ position:absolute; left:0; right:0; top:0; height:1px; background:linear-gradient(90deg, transparent, var(--text), transparent); box-shadow:0 0 24px 2px rgba(244,244,242,.55); animation:railDown 1.4s cubic-bezier(.65,0,.35,1) forwards; }
+  @keyframes railDown{ 0%{ top:0; opacity:0; } 12%{ opacity:1; } 88%{ opacity:1; } 100%{ top:100%; opacity:0; } }
+  @keyframes bootOut{ to{ opacity:0; visibility:hidden; } }
+
+  /* ── Ambient: slow drifting particles, barely there ── */
+  .amb{ position:fixed; inset:0; z-index:1; pointer-events:none; overflow:hidden; }
+  .amb i{ position:absolute; width:1.5px; height:1.5px; border-radius:50%; background:rgba(244,244,242,.5); opacity:0; }
+  .amb i:nth-child(1){ left:12%; animation:float 14s linear 1s infinite; }
+  .amb i:nth-child(2){ left:38%; animation:float 18s linear 5s infinite; }
+  .amb i:nth-child(3){ left:63%; animation:float 16s linear 9s infinite; }
+  .amb i:nth-child(4){ left:85%; animation:float 20s linear 13s infinite; }
+  @keyframes float{ 0%{ top:105%; opacity:0; } 10%{ opacity:.7; } 90%{ opacity:.4; } 100%{ top:-5%; opacity:0; } }
+
+  @keyframes up{ from{ opacity:0; transform:translateY(10px);} to{ opacity:1; transform:translateY(0);} }
+  .in{ opacity:0; animation:up .6s cubic-bezier(.2,.85,.25,1) forwards; }
+
+  /* ── Anchor line: rotating ayah/hadith, Arc-style ── */
+  .anchor{ padding:22px 22px 0; min-height:64px; }
+  .anchor-ar{ font-family:'Amiri', serif; font-size:16px; color:var(--text-dim); direction:rtl; text-align:right; line-height:1.9; transition:opacity .8s ease; }
+  .anchor-en{ font-family:'Instrument Serif', serif; font-style:italic; font-size:13.5px; color:var(--text-faint); text-align:right; margin-top:3px; transition:opacity .8s ease; }
+  .anchor.fade .anchor-ar, .anchor.fade .anchor-en{ opacity:0; }
+
+  .hdr{ padding:26px 22px 0; }
+  .kicker{ font-family:'JetBrains Mono', monospace; font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--text-faint); margin-bottom:14px; }
+  h1{ font-family:'Instrument Serif', serif; font-weight:400; font-size:40px; line-height:1.06; letter-spacing:-.01em; margin-bottom:8px; }
+  h1 .ar{ font-family:'Amiri', serif; font-size:34px; }
+  .tag{ font-size:14.5px; color:var(--text-dim); line-height:1.55; max-width:34ch; }
+
+  /* ── THE FOCAL POINT: one ring, one number, one truth ── */
+  .focal{ padding:38px 22px 4px; display:flex; flex-direction:column; align-items:center; }
+  .ring-wrap{ position:relative; width:196px; height:196px; }
+  .ring-svg{ width:100%; height:100%; transform:rotate(-90deg); }
+  .ring-bg{ fill:none; stroke:var(--line); stroke-width:5; }
+  .ring-fg{ fill:none; stroke:var(--live); stroke-width:5; stroke-linecap:round; filter:drop-shadow(0 0 9px rgba(244,244,242,.4)); transition:stroke-dashoffset 1.1s cubic-bezier(.2,.85,.25,1), stroke .8s ease; }
+  .ring-mid{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  .ring-num{ font-family:'Instrument Serif', serif; font-size:62px; line-height:1; transition:color .8s ease; }
+  .ring-cap{ font-family:'JetBrains Mono', monospace; font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--text-faint); margin-top:8px; }
+  .verdict{ margin-top:22px; text-align:center; font-size:14.5px; line-height:1.55; color:var(--text-dim); max-width:30ch; transition:opacity .5s ease; }
+  .verdict b{ color:var(--text); font-weight:600; }
+
+  .act{ width:calc(100% - 44px); margin:26px 22px 0; padding:17px; border-radius:14px; border:1px solid var(--line); background:var(--text); color:var(--bg); font-family:'Inter'; font-weight:600; font-size:15px; cursor:pointer; transition:transform .14s ease, opacity .3s ease; }
+  .act:active{ transform:scale(.985); }
+  .act.done{ background:transparent; color:var(--text-dim); }
+
+  /* ── Subject rows ── */
+  .subs{ margin:30px 22px 0; }
+  .subs-lbl{ font-family:'JetBrains Mono', monospace; font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--text-faint); margin-bottom:12px; }
+  .sub-row{ display:flex; align-items:center; gap:13px; padding:15px 16px; background:var(--surface); border:1px solid var(--line); border-radius:13px; cursor:pointer; margin-bottom:9px; transition:border-color .25s ease, background .25s ease; }
+  .sub-row:active{ background:var(--surface-2); }
+  .sub-row.on{ border-color:rgba(244,244,242,.4); }
+  .tick{ width:21px; height:21px; border-radius:50%; border:1.5px solid var(--text-faint); flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:all .25s ease; }
+  .sub-row.on .tick{ background:var(--text); border-color:var(--text); }
+  .tick svg path{ stroke-dasharray:16; stroke-dashoffset:16; transition:stroke-dashoffset .3s ease .05s; }
+  .sub-row.on .tick svg path{ stroke-dashoffset:0; }
+  .sub-txt b{ display:block; font-size:14.5px; font-weight:600; }
+  .sub-txt span{ font-size:12.5px; color:var(--text-dim); }
+  .sub-ar{ margin-left:auto; font-family:'Amiri', serif; font-size:17px; color:var(--text-faint); }
+
+  /* ── Drawers ── */
+  .drawers{ margin:30px 22px 0; }
+  .dw{ border:1px solid var(--line); border-radius:13px; margin-bottom:9px; overflow:hidden; background:var(--surface); }
+  .dw-h{ display:flex; align-items:center; justify-content:space-between; padding:15px 16px; cursor:pointer; }
+  .dw-h b{ font-size:14px; font-weight:500; }
+  .dw-h i{ font-style:normal; color:var(--text-faint); font-size:11px; transition:transform .3s cubic-bezier(.2,.85,.25,1); }
+  .dw.open .dw-h i{ transform:rotate(180deg); }
+  .dw-b{ max-height:0; overflow:hidden; transition:max-height .4s cubic-bezier(.2,.85,.25,1); }
+  .dw.open .dw-b{ max-height:460px; }
+  .dw-in{ padding:2px 16px 16px; font-size:13.5px; line-height:1.65; color:var(--text-dim); }
+  .dw-in b{ color:var(--text); font-weight:600; }
+  .mini{ display:flex; gap:11px; padding:12px 0; border-top:1px solid var(--line); }
+  .mini:first-of-type{ border-top:none; }
+  .mini em{ font-style:normal; font-family:'JetBrains Mono', monospace; font-size:10px; color:var(--text-faint); padding-top:3px; }
+  .mini div b{ display:block; font-size:13.5px; margin-bottom:1px; }
+  .mini div span{ font-size:12.5px; color:var(--text-dim); }
+
+  .vault{ margin:34px 22px 0; border:1px solid var(--line); border-radius:16px; background:var(--surface); overflow:hidden; position:relative; }
+  .vault::after{ content:''; position:absolute; inset:0; background:linear-gradient(100deg,transparent 35%,rgba(244,244,242,.07) 50%,transparent 65%); transform:translateX(-100%); animation:vshine 4.5s ease-in-out 3.2s infinite; pointer-events:none; }
+  @keyframes vshine{ 0%{transform:translateX(-100%);} 45%,100%{transform:translateX(100%);} }
+  .vault-top{ display:flex; align-items:center; justify-content:space-between; padding:17px 17px 14px; }
+  .vault-kick{ font-family:'JetBrains Mono', monospace; font-size:9.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--text-faint); margin-bottom:4px; }
+  .vault-title{ font-family:'Instrument Serif', serif; font-size:21px; }
+  .vault-lock{ width:34px; height:34px; border-radius:50%; border:1px solid var(--line); display:flex; align-items:center; justify-content:center; color:var(--text-dim); flex-shrink:0; }
+  @keyframes shake{ 0%,100%{transform:translateX(0);} 20%{transform:translateX(-4px);} 40%{transform:translateX(4px);} 60%{transform:translateX(-3px);} 80%{transform:translateX(3px);} }
+  .vault-lock.shake{ animation:shake .42s ease; }
+  .vault-grid{ display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line); border-top:1px solid var(--line); border-bottom:1px solid var(--line); cursor:pointer; }
+  .vc{ background:var(--surface); padding:15px 13px; filter:blur(3.2px); opacity:.55; transition:filter .5s ease, opacity .5s ease; user-select:none; }
+  .vault.peek .vc{ filter:blur(0); opacity:1; }
+  .vc b{ display:block; font-size:12.5px; font-weight:600; margin-bottom:3px; }
+  .vc span{ font-size:11px; color:var(--text-dim); line-height:1.4; display:block; }
+  .vault-foot{ padding:13px 17px; text-align:center; font-size:12px; color:var(--text-faint); }
+  .vault-foot span{ transition:color .3s ease; }
+
+  .foot{ text-align:center; font-size:12.5px; line-height:1.6; color:var(--text-faint); margin:32px 26px 0; }
+  .foot b{ color:var(--text-dim); font-weight:500; }
+
+  .spark{ position:fixed; width:3px; height:3px; border-radius:50%; background:var(--text); pointer-events:none; z-index:70; }
+</style>
+</head>
+<body>
+<div class="boot"><div class="boot-rail"></div></div>
+<div class="amb"><i></i><i></i><i></i><i></i></div>
+
+<div class="page">
+
+  <div class="anchor in" id="anchor" style="animation-delay:1.55s">
+    <div class="anchor-ar" id="anc-ar">أَحَبُّ الْأَعْمَالِ إِلَى اللَّهِ أَدْوَمُهَا وَإِنْ قَلَّ</div>
+    <div class="anchor-en" id="anc-en">the most beloved deeds are the most consistent, even if small</div>
+  </div>
+
+  <div class="hdr">
+    <div class="kicker in" style="animation-delay:1.68s">Built for The Sunnah Hub · Sydney</div>
+    <h1 class="in" style="animation-delay:1.76s">Thabāt <span class="ar">ثَبَات</span></h1>
+    <p class="tag in" style="animation-delay:1.86s">The intensive ends. This is what carries it — one page your students return to, every day.</p>
+  </div>
+
+  <div class="focal">
+    <div class="ring-wrap in" style="animation-delay:1.98s">
+      <svg class="ring-svg" viewBox="0 0 100 100">
+        <circle class="ring-bg" cx="50" cy="50" r="44"></circle>
+        <circle class="ring-fg" id="ring" cx="50" cy="50" r="44" stroke-dasharray="276.5" stroke-dashoffset="276.5"></circle>
+      </svg>
+      <div class="ring-mid">
+        <div class="ring-num" id="rnum">0</div>
+        <div class="ring-cap" id="rcap">days held</div>
+      </div>
+    </div>
+    <p class="verdict in" id="verdict" style="animation-delay:2.1s">Nothing held yet. <b>Start today — small is enough.</b></p>
+  </div>
+
+  <button class="act in" id="act" style="animation-delay:2.2s">Mark today complete</button>
+
+  <div class="subs">
+    <div class="subs-lbl in" style="animation-delay:2.3s">Today · both required</div>
+    <div class="sub-row in" data-s="0" style="animation-delay:2.36s">
+      <div class="tick"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1.5" stroke="#0A0A0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="sub-txt"><b>Qur'an</b><span>Today's portion, once</span></div>
+      <span class="sub-ar">قُرْآن</span>
+    </div>
+    <div class="sub-row in" data-s="1" style="animation-delay:2.44s">
+      <div class="tick"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.5L4 7.5L10 1.5" stroke="#0A0A0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="sub-txt"><b>Arabic</b><span>One rule from class</span></div>
+      <span class="sub-ar">عَرَبِيّ</span>
+    </div>
+  </div>
+
+  <div class="drawers">
+    <div class="dw in" id="d1" style="animation-delay:2.54s">
+      <div class="dw-h" data-t="d1"><b>Why students drift after an intensive</b><i>▾</i></div>
+      <div class="dw-b"><div class="dw-in">Two days of teaching creates the same illusion every time — that the knowledge is secure. <b>It isn't, until it's been returned to.</b> Nothing in the week after the intensive brings them back to it, so it quietly decays while everyone assumes it landed.</div></div>
+    </div>
+    <div class="dw in" id="d2" style="animation-delay:2.62s">
+      <div class="dw-h" data-t="d2"><b>What the full build adds</b><i>▾</i></div>
+      <div class="dw-b"><div class="dw-in">
+        <div class="mini"><em>01</em><div><b>Every subject in one place</b><span>Sharia, Arabic, Qur'an — one habit, not three to remember</span></div></div>
+        <div class="mini"><em>02</em><div><b>You see who's gone cold</b><span>Before the term ends, not after they've stopped coming</span></div></div>
+        <div class="mini"><em>03</em><div><b>Spaced revision that works</b><span>Material returns exactly when it's about to be lost</span></div></div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="vault in" style="animation-delay:2.72s">
+    <div class="vault-top">
+      <div>
+        <div class="vault-kick">Locked · 6 modules</div>
+        <div class="vault-title">The rest of the build</div>
+      </div>
+      <div class="vault-lock" id="vlock">
+        <svg width="15" height="17" viewBox="0 0 15 17" fill="none"><rect x="1" y="7" width="13" height="9" rx="2.5" stroke="currentColor" stroke-width="1.6"/><path d="M4 7V4.5a3.5 3.5 0 017 0V7" stroke="currentColor" stroke-width="1.6"/></svg>
+      </div>
+    </div>
+    <div class="vault-grid" id="vgrid">
+      <div class="vc"><b>Teacher Dashboard</b><span>Every student's streak, live — see who's gone cold</span></div>
+      <div class="vc"><b>Spaced Revision Engine</b><span>Material returns right before it's forgotten</span></div>
+      <div class="vc"><b>All Subjects</b><span>Sharia · Arabic · Qur'an in one habit</span></div>
+      <div class="vc"><b>Cohort Leaderboard</b><span>Students see the class holding together</span></div>
+      <div class="vc"><b>Parent Reports</b><span>Weekly progress, sent automatically</span></div>
+      <div class="vc"><b>Completion Certificates</b><span>Auto-issued, shareable, branded</span></div>
+    </div>
+    <div class="vault-foot">
+      <span id="vhint">Tap to preview</span>
+    </div>
+  </div>
+
+  <p class="foot in" style="animation-delay:2.8s">No login. No ask attached. Built to <b>show</b>, not tell.</p>
+</div>
+
+<script>
+(function(){
+  const KEY='thabat:farhanbinrafee';
+  const ring=document.getElementById('ring'), rnum=document.getElementById('rnum'), rcap=document.getElementById('rcap');
+  const verdict=document.getElementById('verdict'), act=document.getElementById('act');
+  const rows=Array.from(document.querySelectorAll('.sub-row'));
+  const C=276.5, GOAL=21;
+
+  const LINES=[
+    {ar:'أَحَبُّ الْأَعْمَالِ إِلَى اللَّهِ أَدْوَمُهَا وَإِنْ قَلَّ', en:'the most beloved deeds are the most consistent, even if small'},
+    {ar:'وَذَكِّرْ فَإِنَّ الذِّكْرَىٰ تَنفَعُ الْمُؤْمِنِينَ', en:'and remind, for reminding benefits the believers'},
+    {ar:'وَقُل رَّبِّ زِدْنِي عِلْمًا', en:'and say: my Lord, increase me in knowledge'},
+    {ar:'إِنَّ مَعَ الْعُسْرِ يُسْرًا', en:'indeed, with hardship comes ease'}
+  ];
+  let li=0;
+  const ancEl=document.getElementById('anchor'), ancAr=document.getElementById('anc-ar'), ancEn=document.getElementById('anc-en');
+  setInterval(()=>{
+    ancEl.classList.add('fade');
+    setTimeout(()=>{
+      li=(li+1)%LINES.length;
+      ancAr.textContent=LINES[li].ar; ancEn.textContent=LINES[li].en;
+      ancEl.classList.remove('fade');
+    },820);
+  },7000);
+
+  let st={streak:0,last:null,today:[false,false]};
+  const T=()=>new Date().toISOString().slice(0,10);
+  const D=(a,b)=>Math.round((new Date(b)-new Date(a))/86400000);
+
+  function verdictFor(s){
+    if(s===0) return 'Nothing held yet. <b>Start today — small is enough.</b>';
+    if(s<3)   return '<b>'+s+' day'+(s>1?'s':'')+' held.</b> The hardest part is behind you.';
+    if(s<8)   return 'A week is forming. <b>This is where it stops being effort.</b>';
+    if(s<15)  return '<b>Past the point most people quit.</b> Keep it small, keep it daily.';
+    return '<b>This is no longer a streak — it\'s how you study now.</b>';
+  }
+
+  function paint(anim){
+    const pct=Math.min(st.streak/GOAL,1);
+    ring.style.strokeDashoffset=C-(C*pct);
+    rnum.textContent=st.streak;
+    rcap.textContent=st.streak===1?'day held':'days held';
+    verdict.innerHTML=verdictFor(st.streak);
+    const done=st.last===T();
+    act.classList.toggle('done',done);
+    act.textContent=done?'Held today ✓':'Mark today complete';
+    rows.forEach((r,i)=>r.classList.toggle('on',st.today[i]));
+  }
+
+  function load(){
+    try{
+      const raw=localStorage.getItem(KEY);
+      if(raw){
+        const s=JSON.parse(raw);
+        const broke=s.last&&D(s.last,T())>1;
+        st.streak=broke?0:(s.streak||0);
+        st.last=s.last||null;
+        st.today=s.last===T()?[true,true]:[false,false];
+      }
+    }catch(e){}
+    paint(false);
+  }
+  function save(){ try{ localStorage.setItem(KEY,JSON.stringify(st)); }catch(e){} }
+
+  function burst(el){
+    const r=el.getBoundingClientRect(), cx=r.left+r.width/2, cy=r.top+r.height/2;
+    for(let i=0;i<18;i++){
+      const p=document.createElement('div'); p.className='spark';
+      p.style.left=cx+'px'; p.style.top=cy+'px';
+      p.style.opacity=(0.5+Math.random()*0.5);
+      document.body.appendChild(p);
+      const a=(Math.PI*2*i)/18+Math.random()*.35, d=70+Math.random()*80;
+      const an=p.animate([
+        {transform:'translate(0,0) scale(1)',opacity:1},
+        {transform:'translate('+Math.cos(a)*d+'px,'+(Math.sin(a)*d-24)+'px) scale(0)',opacity:0}
+      ],{duration:780+Math.random()*340,easing:'cubic-bezier(.2,.6,.35,1)'});
+      an.onfinish=()=>p.remove();
+    }
+  }
+
+  rows.forEach((el,i)=>el.addEventListener('click',()=>{
+    st.today[i]=!st.today[i];
+    if(!st.today.every(Boolean) && st.last===T()){
+      st.streak=Math.max(0,st.streak-1); st.last=null;
+    }
+    paint(false); save();
+    if(st.today.every(Boolean) && st.last!==T()) complete();
+  }));
+
+  act.addEventListener('click',()=>{
+    if(st.last===T()){
+      st.streak=Math.max(0,st.streak-1); st.last=null; st.today=[false,false];
+      paint(false); save(); return;
+    }
+    st.today=[true,true]; complete();
+  });
+
+  document.querySelectorAll('[data-t]').forEach(h=>{
+    h.addEventListener('click',()=>{
+      document.getElementById(h.dataset.t).classList.toggle('open');
+    });
+  });
+
+  function complete(){
+    st.streak+=1; st.last=T();
+    paint(true); save(); burst(act);
+  }
+
+  const vault=document.querySelector('.vault'), vgrid=document.getElementById('vgrid');
+  const vlock=document.getElementById('vlock'), vhint=document.getElementById('vhint');
+  let peeking=false;
+  vgrid.addEventListener('click',()=>{
+    if(peeking) return;
+    peeking=true;
+    vault.classList.add('peek');
+    vhint.textContent='Unlocks when the full build ships';
+    vhint.style.color='var(--text-dim)';
+    setTimeout(()=>{
+      vault.classList.remove('peek');
+      vlock.classList.add('shake');
+      setTimeout(()=>vlock.classList.remove('shake'),450);
+      vhint.textContent='Tap to preview';
+      vhint.style.color='';
+      peeking=false;
+    },2600);
+  });
+
+  load();
+})();
+</script>
+</body>
+</html>
