@@ -52,12 +52,12 @@
 
   /* ══ v4.1: SANAD INTRO — introduces the concept before the named build ══ */
   .sanad-intro{ margin-bottom:16px; }
-  .sanad-eyebrow{ display:inline-block; font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:var(--text); border:1px solid var(--line); border-radius:100px; padding:5px 11px; margin-bottom:10px; }
+  .sanad-eyebrow{ display:inline-block; font-family:'Instrument Serif',serif; font-size:13px; letter-spacing:.02em; color:var(--text-faint); margin-bottom:9px; }
   .sanad-def{ font-family:'Instrument Serif',serif; font-style:italic; font-size:15px; line-height:1.55; color:var(--text-dim); max-width:34ch; }
   .sanad-def b{ color:var(--text); font-weight:400; font-style:normal; }
 
-  .hdr{ padding:26px 22px 0; }
-  .kicker{ font-family:'JetBrains Mono', monospace; font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--text-faint); margin-bottom:14px; }
+  .hdr{ padding:30px 22px 0; }
+  .kicker{ font-size:12px; letter-spacing:.01em; color:var(--text-faint); margin-bottom:16px; }
   h1{ font-family:'Instrument Serif', serif; font-weight:400; font-size:40px; line-height:1.06; letter-spacing:-.01em; margin-bottom:8px; }
   h1 .ar{ font-family:'Amiri', serif; font-size:34px; }
   .tag{ font-size:14.5px; color:var(--text-dim); line-height:1.55; max-width:34ch; }
@@ -111,9 +111,9 @@
 
 
   /* ══ v4.2: STUDENT TOOLKIT — the heart of it. What THEIR students get. ══ */
-  .stu{ margin:36px 22px 0; }
+  .stu{ margin:58px 22px 0; }
   .stu-head{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:5px; }
-  .stu-pill{ font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--bg); background:var(--text); border-radius:100px; padding:5px 11px; }
+  .stu-pill{ font-family:'Instrument Serif',serif; font-size:13px; color:var(--text-faint); }
   .stu-count{ font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--text-faint); letter-spacing:.1em; }
   .stu-t{ font-family:'Instrument Serif',serif; font-size:25px; line-height:1.2; margin:12px 0 6px; }
   .stu-sub{ font-size:13.5px; line-height:1.6; color:var(--text-dim); margin-bottom:18px; max-width:36ch; }
@@ -123,7 +123,7 @@
   .scard.seen{ animation:cardIn .65s cubic-bezier(.2,.85,.25,1) forwards; }
   @keyframes cardIn{ to{ opacity:1; transform:translateY(0);} }
   .scard::after{ content:''; position:absolute; inset:0; background:linear-gradient(100deg,transparent 38%,rgba(244,244,242,.06) 50%,transparent 62%); transform:translateX(-100%); }
-  .scard.seen::after{ animation:cardShine 1.4s ease .35s; }
+  .scard.seen::after{ animation:cardShine 1.1s ease .3s; }
   @keyframes cardShine{ to{ transform:translateX(100%);} }
   .sc-top{ display:flex; align-items:center; gap:11px; margin-bottom:10px; }
   .sc-ic{ width:34px; height:34px; border-radius:10px; border:1px solid var(--line); background:var(--surface-2); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
@@ -172,10 +172,6 @@
   @keyframes starPop{ 0%{ opacity:.2; transform:scale(.6);} 60%{ transform:scale(1.25);} 100%{ opacity:1; transform:scale(1);} }
 
   /* coach note — deliberately small, secondary */
-  .coach-note{ margin:16px 22px 0; padding:13px 15px; border:1px solid var(--line); border-radius:11px; background:rgba(19,19,22,.5); display:flex; align-items:flex-start; gap:11px; }
-  .coach-note em{ font-style:normal; font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--text-faint); white-space:nowrap; padding-top:2px; }
-  .coach-note p{ font-size:12.5px; line-height:1.55; color:var(--text-dim); }
-  .coach-note p b{ color:var(--text); font-weight:600; }
 
   .vault{ margin:34px 22px 0; border:1px solid var(--line); border-radius:16px; background:var(--surface); overflow:hidden; position:relative; }
   .vault::after{ content:''; position:absolute; inset:0; background:linear-gradient(100deg,transparent 35%,rgba(244,244,242,.07) 50%,transparent 65%); transform:translateX(-100%); animation:vshine 4.5s ease-in-out 3.2s infinite; pointer-events:none; }
@@ -198,39 +194,11 @@
   .foot b{ color:var(--text-dim); font-weight:500; }
 
 
-  /* ══ v4: SOURCE STRIP — their own data, proves it's built for them ══ */
-  .src{ margin:20px 22px 0; padding:13px 15px; border:1px solid var(--line); border-left:2px solid var(--text); border-radius:11px; background:var(--surface); position:relative; overflow:hidden; }
-  .src::after{ content:''; position:absolute; inset:0; background:linear-gradient(100deg,transparent 40%,rgba(244,244,242,.05) 50%,transparent 60%); transform:translateX(-100%); animation:vshine 6s ease-in-out 4s infinite; }
-  .src-k{ font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--text-faint); margin-bottom:5px; }
-  .src-b{ font-size:13px; line-height:1.6; color:var(--text-dim); }
-  .src-b b{ color:var(--text); font-weight:600; }
 
   /* ══ v4: THE GAP — the deliberate open loop, the single strongest reply driver ══ */
-  .gap{ margin:34px 22px 0; border:1px dashed rgba(244,244,242,.28); border-radius:16px; background:linear-gradient(180deg,var(--surface),rgba(19,19,22,.4)); padding:20px 18px; position:relative; overflow:hidden; }
-  .gap::before{ content:''; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,rgba(244,244,242,.5),transparent); animation:gapScan 3.6s ease-in-out infinite; }
-  @keyframes gapScan{ 0%,100%{ opacity:.25; transform:translateX(-30%);} 50%{ opacity:.9; transform:translateX(30%);} }
-  .gap-k{ font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--text-faint); margin-bottom:9px; display:flex; align-items:center; gap:7px; }
-  .gap-k s{ text-decoration:none; width:5px; height:5px; border-radius:50%; background:var(--text); animation:pulseDot 2s ease-in-out infinite; }
   @keyframes pulseDot{ 0%,100%{ opacity:.3; transform:scale(1);} 50%{ opacity:1; transform:scale(1.5);} }
-  .gap-t{ font-family:'Instrument Serif',serif; font-size:22px; line-height:1.25; margin-bottom:9px; }
-  .gap-b{ font-size:13.5px; line-height:1.65; color:var(--text-dim); }
-  .gap-b b{ color:var(--text); font-weight:600; }
-  .gap-slots{ margin-top:15px; display:flex; flex-direction:column; gap:7px; }
-  .gslot{ display:flex; align-items:center; gap:11px; padding:11px 13px; border:1px solid var(--line); border-radius:10px; background:rgba(10,10,11,.5); }
-  .gslot em{ font-style:normal; font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--text-faint); }
-  .gslot span{ font-size:12.5px; color:var(--text-faint); }
-  .gslot.empty{ border-style:dashed; }
-  .gslot.empty span{ color:var(--text-faint); opacity:.65; font-style:italic; }
-  .gslot.filled span{ color:var(--text-dim); font-style:normal; }
-  .gcursor{ display:inline-block; width:1.5px; height:13px; background:var(--text); margin-left:2px; vertical-align:-2px; animation:blink 1.1s step-end infinite; }
   @keyframes blink{ 0%,100%{opacity:1;} 50%{opacity:0;} }
 
-  /* ══ v4: EXPIRY — real scarcity, live countdown ══ */
-  .exp{ margin:26px 22px 0; text-align:center; }
-  .exp-bar{ height:2px; border-radius:2px; background:var(--line); overflow:hidden; margin-bottom:10px; }
-  .exp-fill{ height:100%; background:linear-gradient(90deg,var(--text-faint),var(--text)); border-radius:2px; transition:width 1s linear; box-shadow:0 0 8px rgba(244,244,242,.4); }
-  .exp-t{ font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:.1em; color:var(--text-faint); }
-  .exp-t b{ color:var(--text-dim); font-weight:500; }
 
   /* ══ v4: locked module badges ══ */
   .vc{ position:relative; }
@@ -241,13 +209,14 @@
   /* ══ v4.3: BOOKING — the whole page points here ══ */
   body{ padding-bottom:110px; }
 
-  .bk{ margin:34px 22px 0; border:1px solid rgba(244,244,242,.22); border-radius:18px; background:linear-gradient(165deg,var(--surface-2),var(--surface)); padding:24px 20px 20px; position:relative; overflow:hidden; }
-  .bk::before{ content:''; position:absolute; inset:-1px; border-radius:18px; padding:1px; background:linear-gradient(135deg,rgba(244,244,242,.4),transparent 35%,transparent 65%,rgba(244,244,242,.25)); -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0); -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none; animation:bkEdge 5s ease-in-out infinite; }
-  @keyframes bkEdge{ 0%,100%{ opacity:.5;} 50%{ opacity:1;} }
-  .bk::after{ content:''; position:absolute; inset:0; background:linear-gradient(100deg,transparent 38%,rgba(244,244,242,.08) 50%,transparent 62%); transform:translateX(-100%); animation:vshine 5.5s ease-in-out 2s infinite; pointer-events:none; }
+  .bk{ margin:58px 22px 0; border:1px solid rgba(244,244,242,.22); border-radius:18px; background:linear-gradient(165deg,var(--surface-2),var(--surface)); padding:24px 20px 20px; position:relative; overflow:hidden; }
+  .bk::before{ content:''; position:absolute; inset:-1px; border-radius:18px; padding:1px; background:linear-gradient(135deg,rgba(244,244,242,.4),transparent 35%,transparent 65%,rgba(244,244,242,.25)); -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0); -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none; opacity:.7; }
+  .bk::after{ content:''; position:absolute; inset:0; background:linear-gradient(100deg,transparent 38%,rgba(244,244,242,.09) 50%,transparent 62%); transform:translateX(-100%); pointer-events:none; }
+  .bk.seen::after{ animation:cardShine 1.3s ease .25s; }
 
-  .bk-k{ font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--text-faint); margin-bottom:11px; display:flex; align-items:center; gap:7px; }
-  .bk-k s{ text-decoration:none; width:5px; height:5px; border-radius:50%; background:var(--text); animation:pulseDot 2s ease-in-out infinite; }
+  .bk-k{ font-family:'Instrument Serif',serif; font-size:13px; color:var(--text-faint); margin-bottom:10px; display:flex; align-items:center; gap:8px; }
+  .bk-k s{ text-decoration:none; width:5px; height:5px; border-radius:50%; background:var(--text-faint); }
+  .bk.seen .bk-k s{ background:var(--text); box-shadow:0 0 8px rgba(244,244,242,.5); transition:all .5s ease .4s; }
   .bk-t{ font-family:'Instrument Serif',serif; font-size:26px; line-height:1.2; margin-bottom:8px; }
   .bk-s{ font-size:13.5px; line-height:1.6; color:var(--text-dim); margin-bottom:18px; }
   .bk-s b{ color:var(--text); font-weight:600; }
@@ -273,7 +242,8 @@
   .bk-btn span{ position:relative; z-index:2; }
   .bk-btn svg{ width:16px; height:16px; position:relative; z-index:2; transition:transform .3s cubic-bezier(.2,.85,.25,1); }
   .bk-btn:hover svg{ transform:translateX(4px); }
-  .bk-btn::before{ content:''; position:absolute; inset:0; background:linear-gradient(100deg,transparent 35%,rgba(10,10,11,.14) 50%,transparent 65%); transform:translateX(-100%); animation:btnShine 3.2s ease-in-out 1.5s infinite; }
+  .bk-btn::before{ content:''; position:absolute; inset:0; background:linear-gradient(100deg,transparent 35%,rgba(10,10,11,.14) 50%,transparent 65%); transform:translateX(-100%); }
+  .bk.seen .bk-btn::before{ animation:btnShine 1.5s ease .7s; }
   @keyframes btnShine{ 0%{transform:translateX(-100%);} 55%,100%{transform:translateX(100%);} }
   .bk-note{ text-align:center; font-size:11.5px; color:var(--text-faint); margin-top:12px; line-height:1.5; }
 
@@ -282,12 +252,44 @@
   .sticky.up{ transform:translateY(0); }
   .sticky-tx{ flex:1; min-width:0; }
   .sticky-tx b{ display:block; font-size:13px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .sticky-tx span{ font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--text-faint); }
+  .sticky-tx span{ font-size:11.5px; color:var(--text-faint); }
   .sticky-btn{ display:flex; align-items:center; gap:7px; padding:12px 18px; border-radius:11px; background:var(--text); color:var(--bg); font-family:'Inter',sans-serif; font-weight:700; font-size:13.5px; text-decoration:none; white-space:nowrap; flex-shrink:0; transition:transform .16s ease; }
   .sticky-btn:active{ transform:scale(.96); }
   .sticky-btn svg{ width:13px; height:13px; }
 
+
+  /* header attribution — a quiet line, not a card */
+  .src-line{ font-size:12.5px; line-height:1.6; color:var(--text-faint); margin-top:14px; max-width:38ch; }
+  .src-line b{ color:var(--text-dim); font-weight:500; }
+
+  /* coach note folded into the student section, deliberately secondary */
+  .stu-coach{ margin-top:16px; padding-top:16px; border-top:1px solid var(--line); font-size:12.5px; line-height:1.6; color:var(--text-faint); }
+  .stu-coach b{ color:var(--text-dim); font-weight:600; }
+
+  /* cost-of-inaction line inside the booking card */
+  .bk-cost{ margin:16px 0 0; padding:13px 15px; border-left:2px solid var(--text-faint); background:rgba(10,10,11,.4); font-family:'Instrument Serif',serif; font-size:16px; line-height:1.5; color:var(--text-dim); border-radius:0 8px 8px 0; }
+  .bk-cost b{ color:var(--text); font-weight:400; }
+
+
+  /* ══ v5: SCROLL REVEAL — nothing below the fold exists until you reach it ══ */
+  [data-rv]{ opacity:0; transform:translateY(20px); }
+  [data-rv].rv{ animation:rvIn .72s cubic-bezier(.2,.85,.25,1) forwards; }
+  @keyframes rvIn{ to{ opacity:1; transform:translateY(0);} }
+
+  /* section heading elements stagger inside their own section */
+  [data-rv] .rv-a{ opacity:0; transform:translateY(12px); }
+  [data-rv].rv .rv-a{ animation:rvIn .6s cubic-bezier(.2,.85,.25,1) .1s forwards; }
+  [data-rv] .rv-b{ opacity:0; transform:translateY(12px); }
+  [data-rv].rv .rv-b{ animation:rvIn .6s cubic-bezier(.2,.85,.25,1) .2s forwards; }
+
   .spark{ position:fixed; width:3px; height:3px; border-radius:50%; background:var(--text); pointer-events:none; z-index:70; }
+
+  @media (prefers-reduced-motion: reduce){
+    *, *::before, *::after{ animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
+    .in, .scard, .bk, [data-rv], [data-rv] .rv-a, [data-rv] .rv-b{ opacity:1 !important; transform:none !important; }
+    .boot{ display:none; }
+  }
+  a:focus-visible, .vault-grid:focus-visible, [data-t]:focus-visible{ outline:2px solid var(--text); outline-offset:3px; border-radius:6px; }
 </style>
 </head>
 <body>
@@ -309,12 +311,9 @@
     </div>
     <h1 class="in" style="animation-delay:1.8s">SANAD_NAME <span class="ar">SANAD_NAME_AR</span></h1>
     <p class="tag in" style="animation-delay:1.9s">TAGLINE</p>
+    <p class="src-line in" style="animation-delay:2s">SOURCE_LINE</p>
   </div>
 
-  <div class="src in" style="animation-delay:1.92s">
-    <div class="src-k">Built from your page</div>
-    <div class="src-b">SOURCE_LINE</div>
-  </div>
 
   <div class="focal">
     <div class="ring-wrap in" style="animation-delay:1.98s">
@@ -347,13 +346,12 @@
   </div>
 
 
-  <div class="stu">
+  <div class="stu" data-rv>
     <div class="stu-head">
-      <span class="stu-pill">For your students</span>
-      <span class="stu-count">STU_COUNT</span>
+      <span class="stu-pill rv-a">For your students</span>
     </div>
-    <div class="stu-t">STU_TITLE</div>
-    <p class="stu-sub">STU_SUB</p>
+    <div class="stu-t rv-a">STU_TITLE</div>
+    <p class="stu-sub rv-b">STU_SUB</p>
 
     <div class="scard" data-sc>
       <div class="sc-top">
@@ -396,32 +394,30 @@
       </div>
       <div class="sc-viz"><span class="vz-badge lit"><s></s>SC4_BADGE</span></div>
     </div>
+
+    <p class="stu-coach">COACH_NOTE</p>
   </div>
 
-  <div class="coach-note">
-    <em>You get</em>
-    <p>COACH_NOTE</p>
-  </div>
 
-  <div class="drawers">
-    <div class="dw in" id="d1" style="animation-delay:2.54s">
+  <div class="drawers" data-rv>
+    <div class="dw" id="d1">
       <div class="dw-h" data-t="d1"><b>Why students drift after an intensive</b><i>▾</i></div>
       <div class="dw-b"><div class="dw-in">Two days of teaching creates the same illusion every time — that the knowledge is secure. <b>It isn't, until it's been returned to.</b> Nothing in the week after the intensive brings them back to it, so it quietly decays while everyone assumes it landed.</div></div>
     </div>
-    <div class="dw in" id="d2" style="animation-delay:2.62s">
+    <div class="dw" id="d2">
       <div class="dw-h" data-t="d2"><b>Where this could go next</b><i>▾</i></div>
       <div class="dw-b"><div class="dw-in">
-        <div class="mini"><em>01</em><div><b>Every subject in one place</b><span>Sharia, Arabic, Qur'an — one habit, not three to remember</span></div></div>
-        <div class="mini"><em>02</em><div><b>You see who's gone cold</b><span>Before the term ends, not after they've stopped coming</span></div></div>
-        <div class="mini"><em>03</em><div><b>Spaced revision that works</b><span>Material returns exactly when it's about to be lost</span></div></div>
+        <div class="mini"><div><b>Every subject in one place</b><span>Sharia, Arabic, Qur'an — one habit, not three to remember</span></div></div>
+        <div class="mini"><div><b>You see who's gone cold</b><span>Before the term ends, not after they've stopped coming</span></div></div>
+        <div class="mini"><div><b>Spaced revision that works</b><span>Material returns exactly when it's about to be lost</span></div></div>
       </div></div>
     </div>
   </div>
 
-  <div class="vault in" style="animation-delay:2.72s">
+  <div class="vault" data-rv>
     <div class="vault-top">
       <div>
-        <div class="vault-kick">Locked · what's next</div>
+        <div class="vault-kick">Still locked</div>
         <div class="vault-title">VAULT_TITLE</div>
       </div>
       <div class="vault-lock" id="vlock">
@@ -441,25 +437,10 @@
     </div>
   </div>
 
-  <div class="gap in" style="animation-delay:2.82s">
-    <div class="gap-k"><s></s>Unmapped · needs you</div>
-    <div class="gap-t">GAP_TITLE</div>
-    <div class="gap-b">GAP_BODY</div>
-    <div class="gap-slots">
-      <div class="gslot filled"><em>01</em><span>GAP_SLOT_1</span></div>
-      <div class="gslot filled"><em>02</em><span>GAP_SLOT_2</span></div>
-      <div class="gslot empty"><em>03</em><span>we fill this in on the call<span class="gcursor"></span></span></div>
-      <div class="gslot empty"><em>04</em><span>—<span class="gcursor"></span></span></div>
-    </div>
-  </div>
 
-  <div class="exp in" style="animation-delay:2.9s">
-    <div class="exp-bar"><div class="exp-fill" id="expfill" style="width:100%"></div></div>
-    <div class="exp-t" id="expt">This link stays live for <b>7 days</b></div>
-  </div>
 
-  <div class="bk" id="bk">
-    <div class="bk-k"><s></s>Next step · 15 minutes</div>
+  <div class="bk" id="bk" data-rv>
+    <div class="bk-k"><s></s>Fifteen minutes</div>
     <div class="bk-t">BK_TITLE</div>
     <p class="bk-s">BK_SUB</p>
     <div class="bk-list">
@@ -467,6 +448,8 @@
       <div class="bk-li"><i><svg viewBox="0 0 10 8" fill="none"><path d="M1 4l2.5 2.5L9 1" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i><div>BK_LI2</div></div>
       <div class="bk-li"><i><svg viewBox="0 0 10 8" fill="none"><path d="M1 4l2.5 2.5L9 1" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></i><div>BK_LI3</div></div>
     </div>
+    <p class="bk-cost">COST_LINE</p>
+
     <a class="bk-btn" href="https://calendly.com/yasser-lumaengine/30min" target="_blank" rel="noopener">
       <span>Book the 15 minutes</span>
       <svg viewBox="0 0 16 16" fill="none"><path d="M2 8h11M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -474,11 +457,11 @@
     <p class="bk-note">Nothing upfront. Pick any slot that works — it takes one tap.</p>
   </div>
 
-  <p class="foot in" style="animation-delay:2.98s">No login. No ask attached. Built to <b>show</b>, not tell.</p>
+  <p class="foot" data-rv>No login. No ask attached. Built to <b>show</b>, not tell.</p>
 </div>
 
 <div class="sticky" id="sticky">
-  <div class="sticky-tx"><b>STICKY_LINE</b><span>15 min · nothing upfront</span></div>
+  <div class="sticky-tx"><b>STICKY_LINE</b><span>15 minutes, nothing upfront</span></div>
   <a class="sticky-btn" href="https://calendly.com/yasser-lumaengine/30min" target="_blank" rel="noopener">
     Book call
     <svg viewBox="0 0 16 16" fill="none"><path d="M2 8h11M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -624,39 +607,31 @@
   }
   window.addEventListener('scroll',onScroll,{passive:true}); onScroll();
 
+  // ── v5: universal scroll reveal — sections appear as you reach them ──
+  const rvEls=document.querySelectorAll('[data-rv]');
   if('IntersectionObserver' in window){
-    const bio=new IntersectionObserver((es)=>{
-      es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('seen'); bio.unobserve(e.target); } });
-    },{threshold:.3});
-    bio.observe(bkEl);
-  } else { bkEl.classList.add('seen'); }
+    const rio=new IntersectionObserver((es)=>{
+      es.forEach(e=>{
+        if(e.isIntersecting){
+          e.target.classList.add('rv');
+          if(e.target.id==='bk') e.target.classList.add('seen');
+          rio.unobserve(e.target);
+        }
+      });
+    },{threshold:.12, rootMargin:'0px 0px -8% 0px'});
+    rvEls.forEach(el=>rio.observe(el));
+  } else {
+    rvEls.forEach(el=>{ el.classList.add('rv'); if(el.id==='bk') el.classList.add('seen'); });
+  }
 
   // ── v4.2: reveal student cards on scroll ──
   const scards=document.querySelectorAll('[data-sc]');
   if('IntersectionObserver' in window){
     const io=new IntersectionObserver((es)=>{
       es.forEach((e,i)=>{ if(e.isIntersecting){ setTimeout(()=>e.target.classList.add('seen'), i*110); io.unobserve(e.target); } });
-    },{threshold:.25});
+    },{threshold:.2, rootMargin:'0px 0px -5% 0px'});
     scards.forEach(c=>io.observe(c));
   } else { scards.forEach(c=>c.classList.add('seen')); }
-
-  // ── v4: expiry countdown, 7 days from first open ──
-  const EKEY=KEY+':opened';
-  let opened;
-  try{ opened=localStorage.getItem(EKEY); }catch(e){}
-  if(!opened){ opened=String(Date.now()); try{ localStorage.setItem(EKEY,opened); }catch(e){} }
-  const START=parseInt(opened,10), SPAN=7*86400000;
-  const expfill=document.getElementById('expfill'), expt=document.getElementById('expt');
-  function tickExp(){
-    const left=Math.max(0,START+SPAN-Date.now());
-    expfill.style.width=(left/SPAN*100)+'%';
-    if(left<=0){ expt.innerHTML='<b>This preview has expired.</b>'; return; }
-    const d=Math.floor(left/86400000), hh=Math.floor(left%86400000/3600000), mm=Math.floor(left%3600000/60000), ss=Math.floor(left%60000/1000);
-    expt.innerHTML= d>0
-      ? 'This link stays live for <b>'+d+'d '+hh+'h '+mm+'m</b>'
-      : 'This link expires in <b>'+hh+'h '+mm+'m '+ss+'s</b>';
-  }
-  tickExp(); setInterval(tickExp,1000);
 
   load();
 })();
