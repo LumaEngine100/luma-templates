@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1">
+<meta name="theme-color" content="#0A0A0B">
+<meta name="color-scheme" content="dark only">
+<title>DM6 KERNEL — reference only, not a live build</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!--
+  ═══════════════════════════════════════════════════════════════════════════
+  DM6 KERNEL — v2, locked Sep 2 2026 after three real builds (Mawqit/fitness,
+  Murāja'ah/Qur'an, Amthāl/Arabic-culture) and one full rejection-and-rebuild
+  cycle. This is the starting point for every future DM6, no exceptions.
+  NEVER SENT TO A CREATOR. This file is not a deliverable.
+
+  ─────────────────────────────────────────────────────────────────────────
+  BEFORE WRITING ANY CODE — confirm with Yasser in 2-3 sentences:
+  (1) the tool concept, (2) what it teaches/does specifically, (3) the ONE
+  interactive core. Wait for a yes. Amthāl was rebuilt twice because this
+  step was skipped — that is the single most expensive mistake to repeat.
+  ─────────────────────────────────────────────────────────────────────────
+
+  PAGE SHAPE IS LOCKED, NOT NEGOTIABLE PER NICHE:
+  Centered hero → Today block → tool's own results area → calendar button
+  → setup-chip → setup panel → week log → foot. This exact order, this
+  exact component chrome (kicker style, card radii, button shapes). A
+  full asymmetric-editorial redesign was built for Amthāl v1 and rejected
+  outright — "niche-specific" applies ONLY to the three things below, never
+  to the page shape itself.
+
+  THE THREE THINGS THAT ACTUALLY CHANGE PER NICHE:
+  1. Skin — 11 CSS variable VALUES in :root (never new variable names —
+     see below). Pick a --display font that fits the niche.
+  2. Hero — MUST be interactive (tap/spin/drag, real motion, not a fade)
+     AND specific to that creator's own content — never a display of the
+     tool's own name or generic "Sanad" branding. Best pattern so far:
+     make landing on/revealing something IS the hero, not decoration next
+     to it (barbell plates loading = real weight; proverb wheel landing =
+     a real line from their own reels).
+  3. Tool engine — the actual algorithm/data model. This is the product.
+     Never reuse one niche's engine wholesale for another (spaced-
+     repetition fits Qur'an revision AND proverb recall because both are
+     genuinely retention problems — it would NOT fit a scheduling problem
+     like Mawqit's window-finding. Pick the engine the niche's real pain
+     actually calls for, don't force-fit whatever was built last time).
+
+  SIMPLICITY IS A HARD CONSTRAINT, NOT A STYLE PREFERENCE:
+  Yasser cannot test behavior until it's live on Cloudflare — every extra
+  moving part is a bug he finds after upload, not before. One clear
+  interactive core per build. No decorative systems bolted on beyond what
+  the tool actually needs. This does not lower the verification bar below
+  — it lowers what gets built in the first place.
+
+  MANDATORY BEFORE ANY BUILD SHIPS (this bar never drops, ever):
+  - node --check on the extracted JS (the script tag's contents)
+  - CSS brace count matches (open === close) — a value split across a
+    newline has broken a build before and is invisible without this check
+  - Every $('id') referenced in JS has a matching id="..." in the HTML
+  - The core algorithm tested in isolation in Node BEFORE it goes near
+    the page (verified: prayer-time geometry against published times,
+    spaced-repetition interval math, rotation-to-top wheel angles)
+  - Zero backslash-escaped quotes inside single-quoted JS strings — use
+    double quotes or template literals for any string containing an
+    apostrophe. This exact bug shipped twice (Farhanbinrafee, Amthāl v1)
+    before node --check started catching it every time
+
+  CSS VARIABLE NAMES — same four, every niche, forever:
+  --accent, --accent-2, --accent-ink, --secondary. Fitness and Qur'an used
+  different names for the same two semantic roles before this was fixed;
+  that made every rule un-copyable without a find-replace pass. Never
+  invent a new variable name for a new niche — only new hex values.
+
+  BOOKING LINK: https://calendly.com/yasser-lumaengine/30min — say
+  "15 minutes" everywhere in copy, never "30" (URL slug is legacy, the
+  actual Calendly event is 15 min as of Sep 1 2026).
+  ═══════════════════════════════════════════════════════════════════════════
+-->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Amiri:wght@400;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ═══════════════════════════════════════════════════════════════
+     NICHE SKIN — the ONLY color/type block that changes per build.
+     Fill these 11 values, everything below reads from them.
+     Fitness used: bg #0B0B0C, accent #FF6A2B/#FFB86B/#1A0A02, secondary #4E7BFF
+     Qur'an used:  bg #0A1210, accent #D4AF6A/#F0D9A8/#251A05, secondary #E0794D
+     Pick a DISPLAY font per niche (Bebas Neue for fitness, Cormorant
+     Garamond for Qur'an) — that's the other real per-niche choice.
+     ═══════════════════════════════════════════════════════════════ */
+  :root{
+    color-scheme: dark only;
+    --bg:#0A0A0B; --bg-2:#0F0F11; --surface:#151517; --surface-2:#1D1D20; --line:#28282C;
+    --text:#F5F4F1; --text-dim:#9A9994; --text-faint:#5E5D59;
+    --accent:#FF6A2B;      /* primary niche color — buttons, live states, urgency */
+    --accent-2:#FFB86B;    /* lighter accent — gradients, glows */
+    --accent-ink:#1A0A02;  /* text color ON TOP of --accent (dark, for contrast) */
+    --secondary:#4E7BFF;   /* the "other" semantic color — Salah blue, a rest-state color, etc */
+    --display:'Inter',sans-serif; /* SWAP: Bebas Neue / Cormorant Garamond / niche-appropriate serif or condensed face */
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  html{background:var(--bg);}
+  body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sans-serif;min-height:100vh;-webkit-font-smoothing:antialiased;display:flex;justify-content:center;overflow-x:hidden;padding-bottom:48px;}
+  .page{width:100%;max-width:460px;position:relative;z-index:2;}
+
+  /* ═══ KERNEL — do not rewrite: ambient glow (color reads from --accent) ═══ */
+  .glow{position:fixed;top:-220px;left:50%;transform:translateX(-50%);width:640px;height:540px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--accent) 22%,transparent),transparent 62%);pointer-events:none;filter:blur(12px);animation:breathe 7s ease-in-out infinite;z-index:0;}
+  @keyframes breathe{0%,100%{opacity:.65;transform:translateX(-50%) scale(1)}50%{opacity:1;transform:translateX(-50%) scale(1.06)}}
+  /* NICHE: swap this texture layer per niche if wanted — grain for fitness, geometric lattice for Qur'an, leave blank if not needed */
+  .texture{position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.05;}
+
+  /* ═══ KERNEL — do not rewrite: boot sequence ═══ */
+  .boot{position:fixed;inset:0;z-index:80;background:var(--bg);pointer-events:none;animation:bootOut .6s ease 1.1s forwards;}
+  .boot-rail{position:absolute;left:0;right:0;top:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);box-shadow:0 0 26px 3px color-mix(in srgb,var(--accent) 65%,transparent);animation:railDown 1s cubic-bezier(.65,0,.35,1) forwards;}
+  @keyframes railDown{0%{top:0;opacity:0}15%{opacity:1}85%{opacity:1}100%{top:100%;opacity:0}}
+  @keyframes bootOut{to{opacity:0;visibility:hidden}}
+  @keyframes up{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+  .in{opacity:0;animation:up .65s cubic-bezier(.2,.85,.25,1) forwards;}
+
+  /* ═══ KERNEL — do not rewrite: setup collapses to a chip after first use ═══ */
+  .setup-chip{display:none;margin:22px 22px 0;padding:14px 16px;background:var(--surface);border:1px solid var(--line);border-radius:16px;align-items:center;gap:12px;cursor:pointer;transition:border-color .2s,transform .15s;}
+  .setup-chip.show{display:flex;}
+  .setup-chip:active{transform:scale(.99);}
+  .sc-ic{width:34px;height:34px;border-radius:10px;background:var(--bg-2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--accent);}
+  .sc-tx{flex:1;min-width:0;}
+  .sc-tx b{display:block;font-size:13.5px;font-weight:600;}
+  .sc-tx span{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--text-faint);}
+  .panel.hid{display:none;}
+
+  /* ═══ KERNEL — do not rewrite: "Today" hero block (the daily-return driver) ═══ */
+  .today{margin:24px 22px 0;padding:20px 18px;border-radius:20px;position:relative;overflow:hidden;display:none;
+    background:linear-gradient(160deg,color-mix(in srgb,var(--accent) 13%,transparent),var(--surface) 62%);border:1px solid color-mix(in srgb,var(--accent) 30%,transparent);}
+  .today.show{display:block;}
+  .today.alt{background:linear-gradient(160deg,color-mix(in srgb,var(--secondary) 13%,transparent),var(--surface) 62%);border-color:color-mix(in srgb,var(--secondary) 30%,transparent);}
+  .today::after{content:'';position:absolute;inset:0;background:linear-gradient(100deg,transparent 38%,rgba(255,255,255,.05) 50%,transparent 62%);transform:translateX(-100%);animation:sweep2 7s ease-in-out 1.5s infinite;pointer-events:none;}
+  @keyframes sweep2{0%{transform:translateX(-100%)}40%,100%{transform:translateX(100%)}}
+  .td-k{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-faint);display:flex;align-items:center;gap:7px;margin-bottom:9px;}
+  .td-k s{text-decoration:none;width:5px;height:5px;border-radius:50%;background:var(--accent);animation:pulseDot 2s ease-in-out infinite;}
+  @keyframes pulseDot{0%,100%{opacity:.4}50%{opacity:1}}
+  .today.alt .td-k s{background:var(--secondary);}
+  .td-big{font-family:var(--display);font-size:42px;line-height:1;}
+  .td-sub{margin-top:9px;font-size:13px;line-height:1.5;color:var(--text-dim);}
+  .td-sub b{color:var(--text);font-weight:600;}
+
+  /* ═══ KERNEL — do not rewrite: run/CTA button ═══ */
+  .run{width:100%;padding:17px;border-radius:15px;border:none;background:var(--accent);color:var(--accent-ink);font-family:var(--display);font-size:22px;letter-spacing:.04em;cursor:pointer;position:relative;overflow:hidden;box-shadow:0 12px 30px color-mix(in srgb,var(--accent) 30%,transparent);transition:transform .15s;}
+  .run:active{transform:scale(.98);}
+  .run::after{content:'';position:absolute;inset:0;background:linear-gradient(100deg,transparent 35%,rgba(255,255,255,.3) 50%,transparent 65%);transform:translateX(-100%);}
+  .run.pulse::after{animation:sweep 1s ease;}
+  @keyframes sweep{to{transform:translateX(100%)}}
+
+  /* ═══ KERNEL — do not rewrite: week streak grid + history ═══ */
+  .log{margin:26px 22px 0;display:none;}
+  .log.show{display:block;}
+  .log-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;}
+  .log-h b{font-family:var(--display);font-size:22px;}
+  .log-h span{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-faint);letter-spacing:.08em;}
+  .week{display:grid;grid-template-columns:repeat(7,1fr);gap:7px;}
+  .dy{aspect-ratio:1;border-radius:12px;border:1px solid var(--line);background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;transition:all .3s cubic-bezier(.34,1.56,.64,1);}
+  .dy i{font-style:normal;font-size:9px;color:var(--text-faint);letter-spacing:.06em;}
+  .dy b{width:8px;height:8px;border-radius:50%;background:var(--line);}
+  .dy.done{border-color:var(--accent);background:linear-gradient(160deg,color-mix(in srgb,var(--accent) 20%,transparent),var(--surface));transform:translateY(-2px);}
+  .dy.done b{background:var(--accent);box-shadow:0 0 10px color-mix(in srgb,var(--accent) 70%,transparent);}
+  .dy.today{border-color:var(--text-faint);}
+  .streak{margin-top:10px;font-size:12px;color:var(--text-dim);}
+  .streak b{color:var(--text);font-weight:700;}
+  .hist{margin-top:14px;border-top:1px solid var(--line);padding-top:12px;display:none;}
+  .hist.show{display:block;}
+  .hrow{display:flex;align-items:center;gap:10px;padding:8px 0;font-size:12px;color:var(--text-dim);border-bottom:1px solid var(--line);}
+  .hrow:last-child{border-bottom:none;}
+  .hrow b{font-family:'JetBrains Mono',monospace;color:var(--text);font-weight:500;min-width:38px;}
+  .hrow span{flex:1;}
+
+  /* ═══ KERNEL — do not rewrite: calendar export button ═══ */
+  .cal{margin:14px 22px 0;display:none;}
+  .cal.show{display:block;}
+  .cal button{width:100%;padding:15px;border-radius:14px;border:1px solid var(--line);background:var(--surface);color:var(--text);font-family:'Inter',sans-serif;font-weight:600;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;}
+  .cal button svg{width:15px;height:15px;stroke:var(--accent);}
+  .cal-note{margin-top:8px;text-align:center;font-size:11px;color:var(--text-faint);}
+
+  /* ═══ KERNEL — do not rewrite: foot / locked-modules / final CTA ═══ */
+  .foot{margin:44px 22px 0;padding-top:22px;border-top:1px solid var(--line);}
+  .foot-l{font-size:13px;line-height:1.6;color:var(--text-dim);}
+  .foot-l b{color:var(--text);font-weight:600;}
+  .locked{margin-top:14px;display:flex;flex-wrap:wrap;gap:6px;}
+  .lk{display:inline-flex;align-items:center;gap:6px;padding:7px 11px;border:1px solid var(--line);border-radius:100px;font-size:11.5px;color:var(--text-faint);background:var(--surface);}
+  .lk svg{width:9px;height:10px;}
+  .foot-cta{margin-top:18px;display:flex;align-items:center;justify-content:center;gap:9px;width:100%;padding:16px;border-radius:14px;background:var(--text);color:var(--bg);font-family:'Inter',sans-serif;font-weight:700;font-size:15px;text-decoration:none;transition:transform .15s;}
+  .foot-cta:active{transform:scale(.98);}
+  .foot-cta svg{width:15px;height:15px;transition:transform .25s ease;}
+  .foot-by{margin-top:18px;font-size:11px;color:var(--text-faint);text-align:center;}
+
+  /* ═══ KERNEL — do not rewrite: toast + spark burst ═══ */
+  .toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);background:var(--accent);color:var(--accent-ink);padding:11px 16px;border-radius:100px;font-size:13px;font-weight:700;opacity:0;pointer-events:none;transition:all .3s cubic-bezier(.2,.85,.25,1);z-index:75;}
+  .toast.on{opacity:1;transform:translate(-50%,0);}
+  .sparks{position:fixed;inset:0;pointer-events:none;z-index:70;}
+  .sp{position:absolute;width:6px;height:6px;border-radius:50%;background:var(--accent);animation:spFly .9s cubic-bezier(.2,.85,.25,1) forwards;}
+  @keyframes spFly{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.2)}}
+
+  /* ═══ KERNEL — do not rewrite: scroll reveal ═══ */
+  [data-rv]{opacity:0;transform:translateY(16px);}
+  [data-rv].rv{animation:up .65s cubic-bezier(.2,.85,.25,1) forwards;}
+
+  /* ═══ NICHE-SPECIFIC — hero, tool engine, setup-input CSS all go here, rebuilt per creator ═══ */
+  /* e.g. .bar-stage / .fold-stage, .ring-wrap, .juz grid, .fld inputs — whatever the tool needs */
+
+  /* ═══ KERNEL — do not rewrite: accessibility floor ═══ */
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;}
+    .in,[data-rv]{opacity:1!important;transform:none!important;}
+    .boot,.glow,.texture{display:none;}
+  }
+</style>
+</head>
+<body>
+<div class="boot"><div class="boot-rail"></div></div>
+<div class="glow"></div>
+<div class="texture"></div>
+<div class="sparks" id="sparks"></div>
+
+<div class="page">
+
+  <!-- ═══ NICHE-SPECIFIC: hero markup goes here (barbell / page-fold / whatever fits) ═══ -->
+  <div class="hero">
+    <div class="kicker in" style="animation-delay:.3s">A piece of your Sanad · <b id="kHandle">HANDLE</b></div>
+    <!-- hero animation element -->
+    <h1 class="h1 in" style="animation-delay:.5s"><span id="tName">TOOL_NAME</span><span class="ar" id="tAr">ARABIC_NAME</span></h1>
+    <p class="lede in" style="animation-delay:.62s" id="lede">TAGLINE</p>
+    <p class="from in" style="animation-delay:.7s" id="from">SOURCE_LINE</p>
+  </div>
+
+  <!-- ═══ KERNEL markup: Today block, reused verbatim ═══ -->
+  <div class="today" id="today">
+    <div class="td-k"><s></s><span id="tdK">Today</span></div>
+    <div class="td-big" id="tdBig"></div>
+    <p class="td-sub" id="tdSub"></p>
+  </div>
+
+  <!-- ═══ NICHE-SPECIFIC: the tool's own results/queue display ═══ -->
+  <div id="toolResults"></div>
+
+  <!-- ═══ KERNEL markup: calendar button ═══ -->
+  <div class="cal" id="cal">
+    <button id="calBtn">
+      <svg viewBox="0 0 20 20" fill="none"><rect x="2.5" y="4" width="15" height="13.5" rx="2.5" stroke-width="1.6"/><path d="M2.5 8h15M6.5 2v4M13.5 2v4" stroke-width="1.6" stroke-linecap="round"/></svg>
+      CAL_LABEL
+    </button>
+    <p class="cal-note">CAL_NOTE</p>
+  </div>
+
+  <!-- ═══ KERNEL markup: setup chip ═══ -->
+  <div class="setup-chip" id="chip" role="button">
+    <div class="sc-ic"><!-- small icon --></div>
+    <div class="sc-tx"><b>CHIP_LABEL</b><span id="chipSummary"></span></div>
+    <span>›</span>
+  </div>
+
+  <!-- ═══ NICHE-SPECIFIC: the actual setup panel — inputs, grids, whatever the tool needs ═══ -->
+  <div class="panel in" id="panel" style="animation-delay:.9s">
+    <!-- tool-specific inputs -->
+    <button class="run" id="run">RUN_LABEL</button>
+  </div>
+
+  <!-- ═══ KERNEL markup: log ═══ -->
+  <div class="log" id="log">
+    <div class="log-h"><b>This week</b><span>MON – SUN</span></div>
+    <div class="week" id="week"></div>
+    <p class="streak" id="streak"></p>
+    <div class="hist" id="hist"></div>
+  </div>
+
+  <!-- ═══ KERNEL markup: foot ═══ -->
+  <div class="foot" data-rv>
+    <p class="foot-l"><b>FOOT_LEAD.</b> FOOT_BODY</p>
+    <div class="locked" id="locked"></div>
+    <a class="foot-cta" href="https://calendly.com/yasser-lumaengine/30min" target="_blank" rel="noopener">See the whole build, 15 minutes
+      <svg viewBox="0 0 16 16" fill="none"><path d="M2 8h11M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+    <p class="foot-by" id="by"></p>
+  </div>
+
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  /* ═══ CONFIG — the only values that change per creator, beyond the tool engine itself ═══ */
+  const CONFIG={
+    handle:'@HANDLE', toolName:'TOOL_NAME', toolAr:'ARABIC',
+    storageKey:'toolkey:handle',
+    locked:['Module 1','Module 2','Module 3','Module 4','Module 5','Module 6']
+  };
+  const $=id=>document.getElementById(id);
+  $('kHandle').textContent=CONFIG.handle;
+  $('by').textContent='Luma Engine · built for '+CONFIG.handle+' and their students';
+  $('locked').innerHTML=CONFIG.locked.map(n=>'<span class="lk"><svg viewBox="0 0 15 17" fill="none"><rect x="1" y="7" width="13" height="9" rx="2.5" stroke="currentColor" stroke-width="1.6"/><path d="M4 7V4.5a3.5 3.5 0 017 0V7" stroke="currentColor" stroke-width="1.6"/></svg>'+n+'</span>').join('');
+
+  /* ═══ KERNEL — do not rewrite: toast + sparks ═══ */
+  function toast(m){ const t=$('toast'); t.textContent=m; t.classList.add('on'); setTimeout(()=>t.classList.remove('on'),1600); }
+  function spark(x,y,n){ const S=$('sparks'); for(let i=0;i<n;i++){ const s=document.createElement('div'); s.className='sp';
+    const a=Math.random()*Math.PI*2, d=40+Math.random()*70; s.style.left=x+'px'; s.style.top=y+'px';
+    s.style.setProperty('--dx',Math.cos(a)*d+'px'); s.style.setProperty('--dy',Math.sin(a)*d-20+'px');
+    S.appendChild(s); setTimeout(()=>s.remove(),950); } }
+
+  /* ═══ KERNEL — do not rewrite: setup-chip collapse ═══ */
+  function collapseSetup(summaryText){
+    $('panel').classList.add('hid'); $('chip').classList.add('show'); $('chipSummary').textContent=summaryText;
+  }
+  $('chip').addEventListener('click',()=>{ $('panel').classList.remove('hid'); $('chip').classList.remove('show'); $('panel').scrollIntoView({behavior:'smooth',block:'center'}); });
+
+  /* ═══ KERNEL — do not rewrite: week streak grid + history (generic, id-based) ═══ */
+  const DAYS=['M','T','W','T','F','S','S'];
+  function weekKey(){ const d=new Date(); const day=(d.getDay()+6)%7; d.setDate(d.getDate()-day); return d.toISOString().slice(0,10); }
+  function getLog(){ try{ const s=JSON.parse(localStorage.getItem(CONFIG.storageKey+':log')||'{}'); return s.week===weekKey()?s.days:[0,0,0,0,0,0,0]; }catch(e){return[0,0,0,0,0,0,0]} }
+  function setLog(days){ try{ localStorage.setItem(CONFIG.storageKey+':log',JSON.stringify({week:weekKey(),days})); }catch(e){} }
+  function getHist(){ try{ return JSON.parse(localStorage.getItem(CONFIG.storageKey+':hist')||'[]'); }catch(e){return[]} }
+  function addHist(entry){ try{ const hs=getHist(); hs.unshift(entry); localStorage.setItem(CONFIG.storageKey+':hist',JSON.stringify(hs.slice(0,20))); }catch(e){} }
+  function logToday(entry){ const days=getLog(), today=(new Date().getDay()+6)%7; days[today]=1; setLog(days); if(entry) addHist(entry); drawWeek(); }
+  function drawWeek(){
+    const days=getLog(), today=(new Date().getDay()+6)%7, w=$('week'); w.innerHTML='';
+    DAYS.forEach((d,i)=>{ const el=document.createElement('div'); el.className='dy'+(days[i]?' done':'')+(i===today?' today':''); el.innerHTML='<i>'+d+'</i><b></b>'; w.appendChild(el); });
+    const count=days.filter(Boolean).length; let streak=0; for(let i=today;i>=0;i--){ if(days[i]) streak++; else break; }
+    $('streak').innerHTML=count?('<b>'+count+'</b> session'+(count===1?'':'s')+' this week'+(streak>1?' · <b>'+streak+'</b> days running — don\u2019t break it':'')):'No sessions logged yet this week';
+    const hs=getHist(), hbox=$('hist');
+    if(hs.length){ hbox.classList.add('show'); hbox.innerHTML=hs.slice(0,5).map(e=>'<div class="hrow"><b>'+e.d+'</b><span>'+e.label+'</span></div>').join(''); }
+    else hbox.classList.remove('show');
+    $('log').classList.add('show');
+  }
+  // usage per build: call logToday({label:'whatever description'}) when the user completes today's action
+
+  /* ═══ KERNEL — do not rewrite: calendar export, 3-tier iOS-safe ═══
+     Call buildAndExportICS({summary, description, startDate, endDate}) from your button handler. */
+  function pad(n){return String(n).padStart(2,'0')}
+  function icsStamp(d){ return d.getUTCFullYear()+pad(d.getUTCMonth()+1)+pad(d.getUTCDate())+'T'+pad(d.getUTCHours())+pad(d.getUTCMinutes())+'00Z'; }
+  async function buildAndExportICS({summary, description, startDate, endDate, fname, ev}){
+    const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Luma Engine//'+CONFIG.toolName+'//EN','CALSCALE:GREGORIAN','METHOD:PUBLISH','BEGIN:VEVENT',
+      'UID:'+Date.now()+'@lumaengine','DTSTAMP:'+icsStamp(new Date()),
+      'DTSTART:'+icsStamp(startDate),'DTEND:'+icsStamp(endDate),'RRULE:FREQ=DAILY',
+      'SUMMARY:'+summary,'DESCRIPTION:'+description,
+      'BEGIN:VALARM','TRIGGER:-PT10M','ACTION:DISPLAY','DESCRIPTION:Reminder','END:VALARM',
+      'END:VEVENT','END:VCALENDAR'].join('\r\n');
+    if(ev) spark(ev.clientX,ev.clientY,14);
+    try{
+      if(navigator.canShare && window.File){ const f=new File([ics],fname,{type:'text/calendar'});
+        if(navigator.canShare({files:[f]})){ await navigator.share({files:[f],title:summary}); toast('Added — repeats daily'); return; } }
+    }catch(err){ if(err && err.name==='AbortError') return; }
+    try{
+      const uri='data:text/calendar;charset=utf-8,'+encodeURIComponent(ics);
+      const a=document.createElement('a'); a.href=uri; a.download=fname; document.body.appendChild(a); a.click(); a.remove();
+      toast('Opening your calendar…'); return;
+    }catch(err){}
+    try{
+      const blob=new Blob([ics],{type:'text/calendar'});
+      const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=fname; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(()=>URL.revokeObjectURL(a.href),2000); toast('Downloaded — open it to add');
+    }catch(err){ toast("Couldn't open calendar on this device"); }
+  }
+
+  /* ═══ KERNEL — do not rewrite: scroll reveal ═══ */
+  const rv=document.querySelectorAll('[data-rv]');
+  if('IntersectionObserver' in window){ const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('rv');io.unobserve(e.target);}}),{threshold:.15,rootMargin:'0px 0px -8% 0px'}); rv.forEach(el=>io.observe(el)); } else rv.forEach(el=>el.classList.add('rv'));
+
+  /* ═══════════════════════════════════════════════════════════════
+     NICHE-SPECIFIC FROM HERE — the actual tool engine.
+     This is the part that has to be reasoned through fresh every
+     time: the data model, the algorithm, the setup interaction,
+     the "Today" state logic. Fitness = prayer-time geometry +
+     window-ranking. Qur'an = spaced-repetition scheduling. The next
+     one is whatever the niche actually needs — do not force-fit
+     either of those two engines onto a niche they don't suit.
+     ═══════════════════════════════════════════════════════════════ */
+
+})();
+</script>
+</body>
+</html>
